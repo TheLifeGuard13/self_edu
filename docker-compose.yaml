@@ -16,37 +16,6 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:latest
-    restart: on-failure
-    expose:
-      - "6379"
-    env_file:
-      - .env
-
-  celery:
-    build: .
-    tty: true
-    restart: on-failure
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - app
-      - db
-    command: celery -A config worker -l INFO -P eventlet
-
-  celery-bit:
-    build: .
-    tty: true
-    restart: on-failure
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - app
-      - db
-    command: celery -A config beat -l INFO
 
   app:
     build: .
@@ -61,7 +30,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000 && python manage.py csu"
 
 
 volumes:
