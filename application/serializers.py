@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from application.models import Chapter, Material, Question, Answer, Subscription
+from application.models import Chapter, Material, Subscription
 from application.validators import UrlValidator
 
 
@@ -36,16 +36,4 @@ class ChapterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chapter
-        fields = "__all__"
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = "__all__"
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
         fields = "__all__"
