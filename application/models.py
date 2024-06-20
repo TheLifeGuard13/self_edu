@@ -35,7 +35,7 @@ class Material(models.Model):
     description = models.TextField(**NULLABLE, verbose_name="Описание")
     preview = models.ImageField(upload_to="material/", **NULLABLE, verbose_name="Превью")
     url = models.CharField(max_length=150, **NULLABLE, verbose_name="Ссылка")
-    course = models.ForeignKey(Chapter, on_delete=models.CASCADE, **NULLABLE, verbose_name="Раздел")
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, **NULLABLE, verbose_name="Раздел")
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, default="", on_delete=models.CASCADE, **NULLABLE, verbose_name="Владелец"
     )

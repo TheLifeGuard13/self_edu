@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -16,7 +16,7 @@ class ChapterViewSet(viewsets.ModelViewSet):
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
     pagination_class = ApplicationPaginator
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends = [OrderingFilter]
     ordering_fields = ["created", 'id']
 
     def perform_create(self, serializer):
@@ -25,10 +25,10 @@ class ChapterViewSet(viewsets.ModelViewSet):
         habit.save()
 
     def get_permissions(self):
-        if self.action in ["create", "update", "destroy"]:
-            self.permission_classes = (IsStaff,)
-        else:
+        if self.action in ["list", "retrieve"]:
             self.permission_classes = (IsAuthenticated,)
+        else:
+            self.permission_classes = (IsStaff,)
         return super().get_permissions()
 
 
@@ -37,7 +37,17 @@ class MaterialViewSet(viewsets.ModelViewSet):
     serializer_class = MaterialSerializer
     pagination_class = ApplicationPaginator
     filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ["chapter"]
     ordering_fields = ["created", "id"]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset()
+        chapter = self.request.query_params.get("chapter")
+        is_subscribed_for_chapter = Subscription.objects.filter(chapter=chapter, subscriber=self.request.user).exists()
+        if is_subscribed_for_chapter or self.request.user.is_staff:
+            return queryset.filter(chapter=chapter)
+        else:
+            return queryset.none()
 
     def perform_create(self, serializer):
         habit = serializer.save()
@@ -45,10 +55,10 @@ class MaterialViewSet(viewsets.ModelViewSet):
         habit.save()
 
     def get_permissions(self):
-        if self.action in ["create", "update", "destroy"]:
-            self.permission_classes = (IsStaff,)
-        else:
+        if self.action in ["list", "retrieve"]:
             self.permission_classes = (IsAuthenticated,)
+        else:
+            self.permission_classes = (IsStaff,)
         return super().get_permissions()
 
 
