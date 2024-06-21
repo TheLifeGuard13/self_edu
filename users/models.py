@@ -5,6 +5,9 @@ from config.settings import NULLABLE
 
 
 class User(AbstractUser):
+    """
+    Модель Пользователя
+    """
     username = None
     email = models.EmailField(unique=True, verbose_name="Почта")
 

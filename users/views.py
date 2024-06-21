@@ -8,6 +8,7 @@ from users.serializers import UserSerializer
 
 
 class UserCreateAPIView(generics.CreateAPIView):
+    """Контроллер для регистрации нового пользователя"""
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (AllowAny,)

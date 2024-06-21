@@ -14,6 +14,7 @@ from users.permissions import IsStaff
 
 
 class ChapterViewSet(viewsets.ModelViewSet):
+    """Контроллер CRUD для работы с разделами"""
     queryset = Chapter.objects.all()
     serializer_class = ChapterSerializer
     pagination_class = ApplicationPaginator
@@ -34,6 +35,7 @@ class ChapterViewSet(viewsets.ModelViewSet):
 
 
 class MaterialViewSet(viewsets.ModelViewSet):
+    """Контроллер CRUD для работы с материалами"""
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
     pagination_class = ApplicationPaginator
@@ -64,6 +66,7 @@ class MaterialViewSet(viewsets.ModelViewSet):
 
 
 class SubscriptionCreateAPIView(generics.CreateAPIView):
+    """Контроллер Create для работы с подписками на разделы"""
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticated,)
 

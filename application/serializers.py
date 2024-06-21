@@ -14,6 +14,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class MaterialSerializer(serializers.ModelSerializer):
+    """Сериализатор материала"""
     class Meta:
         model = Material
         fields = "__all__"
@@ -21,6 +22,7 @@ class MaterialSerializer(serializers.ModelSerializer):
 
 
 class ChapterSerializer(serializers.ModelSerializer):
+    """Сериализатор раздела"""
     material = MaterialSerializer(source="material_set", many=True, read_only=True)
     material_in_chapter_count = SerializerMethodField()
     is_subscribed = SerializerMethodField()
