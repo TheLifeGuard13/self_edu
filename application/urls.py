@@ -12,6 +12,10 @@ chapter_router.register(r"chapter", ChapterViewSet, basename="chapter")
 material_router = DefaultRouter()
 material_router.register(r"material", MaterialViewSet, basename="material")
 
-urlpatterns = [
-    path("subscription/create", SubscriptionCreateAPIView.as_view(), name="create_subscription"),
-] + chapter_router.urls + material_router.urls
+urlpatterns = (
+    [
+        path("subscription/create", SubscriptionCreateAPIView.as_view(), name="create_subscription"),
+    ]
+    + chapter_router.urls
+    + material_router.urls
+)

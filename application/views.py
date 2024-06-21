@@ -1,5 +1,7 @@
+import typing
+
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics, status
+from rest_framework import generics, viewsets
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -7,8 +9,7 @@ from rest_framework.response import Response
 
 from application.models import Chapter, Material, Subscription
 from application.paginators import ApplicationPaginator
-from application.serializers import MaterialSerializer, ChapterSerializer, SubscriptionSerializer
-
+from application.serializers import ChapterSerializer, MaterialSerializer, SubscriptionSerializer
 from users.permissions import IsStaff
 
 
@@ -17,14 +18,14 @@ class ChapterViewSet(viewsets.ModelViewSet):
     serializer_class = ChapterSerializer
     pagination_class = ApplicationPaginator
     filter_backends = [OrderingFilter]
-    ordering_fields = ["created", 'id']
+    ordering_fields = ["created", "id"]
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: typing.Any) -> typing.Any:
         habit = serializer.save()
         habit.owner = self.request.user
         habit.save()
 
-    def get_permissions(self):
+    def get_permissions(self) -> typing.Any:
         if self.action in ["list", "retrieve"]:
             self.permission_classes = (IsAuthenticated,)
         else:
@@ -40,7 +41,7 @@ class MaterialViewSet(viewsets.ModelViewSet):
     filterset_fields = ["chapter"]
     ordering_fields = ["created", "id"]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self, *args: typing.Any, **kwargs: typing.Any) -> typing.Any:
         queryset = super().get_queryset()
         chapter = self.request.query_params.get("chapter")
         is_subscribed_for_chapter = Subscription.objects.filter(chapter=chapter, subscriber=self.request.user).exists()
@@ -49,12 +50,12 @@ class MaterialViewSet(viewsets.ModelViewSet):
         else:
             return queryset.none()
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: typing.Any) -> typing.Any:
         habit = serializer.save()
         habit.owner = self.request.user
         habit.save()
 
-    def get_permissions(self):
+    def get_permissions(self) -> typing.Any:
         if self.action in ["list", "retrieve"]:
             self.permission_classes = (IsAuthenticated,)
         else:
@@ -66,7 +67,7 @@ class SubscriptionCreateAPIView(generics.CreateAPIView):
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: typing.Any, *args: typing.Any, **kwargs: typing.Any) -> typing.Any:
         user = self.request.user
         chapter_id = self.request.data.get("chapter")
         chapter_item = get_object_or_404(Chapter, pk=chapter_id)

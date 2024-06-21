@@ -23,7 +23,7 @@ class Chapter(models.Model):
     class Meta:
         verbose_name = "раздел"
         verbose_name_plural = "разделы"
-        ordering = ['id']
+        ordering = ["id"]
 
 
 class Material(models.Model):
@@ -47,7 +47,7 @@ class Material(models.Model):
     class Meta:
         verbose_name = "материал"
         verbose_name_plural = "материалы"
-        ordering = ['id']
+        ordering = ["id"]
 
 
 class Subscription(models.Model):
@@ -55,10 +55,12 @@ class Subscription(models.Model):
     Модель Подписки
     """
 
-    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, **NULLABLE, verbose_name="Раздел",
-                                related_name="chapter_for_subscription")
+    chapter = models.ForeignKey(
+        Chapter, on_delete=models.CASCADE, **NULLABLE, verbose_name="Раздел", related_name="chapter_for_subscription"
+    )
     subscriber = models.ForeignKey(
-        settings.AUTH_USER_MODEL, default="", on_delete=models.CASCADE, **NULLABLE, verbose_name="Подписчик")
+        settings.AUTH_USER_MODEL, default="", on_delete=models.CASCADE, **NULLABLE, verbose_name="Подписчик"
+    )
 
     def __str__(self) -> str:
         return f"{self.chapter}, {self.subscriber}"

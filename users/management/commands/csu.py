@@ -15,12 +15,12 @@ class Command(BaseCommand):
             first_name=settings.SUPERUSER_FIRST_NAME,
             last_name=settings.SUPERUSER_LAST_NAME,
             is_staff=True,
-            is_superuser=True
+            is_superuser=True,
         )
 
         if created:
             user.set_password(settings.SUPERUSER_PASSWORD)
             user.save()
-            self.stdout.write(self.style.SUCCESS('Superuser created successfully'))
+            self.stdout.write(self.style.SUCCESS("Superuser created successfully"))
         else:
-            self.stdout.write(self.style.WARNING('Superuser already exists'))
+            self.stdout.write(self.style.WARNING("Superuser already exists"))

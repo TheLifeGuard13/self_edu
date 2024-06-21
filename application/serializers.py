@@ -1,3 +1,5 @@
+import typing
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -22,12 +24,12 @@ class ChapterSerializer(serializers.ModelSerializer):
     material = MaterialSerializer(source="material_set", many=True, read_only=True)
     material_in_chapter_count = SerializerMethodField()
     is_subscribed = SerializerMethodField()
-    subscribers = SubscriptionSerializer(source='chapter_for_subscription', many=True, read_only=True)
+    subscribers = SubscriptionSerializer(source="chapter_for_subscription", many=True, read_only=True)
 
-    def get_material_in_chapter_count(self, obj):
+    def get_material_in_chapter_count(self, obj: typing.Any) -> typing.Any:
         return obj.material_set.all().count()
 
-    def get_is_subscribed(self, obj):
+    def get_is_subscribed(self, obj: typing.Any) -> typing.Any:
         request = self.context.get("request")
         user = None
         if request:
